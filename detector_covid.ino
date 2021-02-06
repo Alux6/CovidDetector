@@ -18,6 +18,7 @@ long Pitar2 = 0;
 long Seg = 0;
 long Tiempo = 0;
 int Debug = 1000;
+long Tiempo2 = 60000;
 int CO2 = 0;
 float t = 0;
 
@@ -39,7 +40,13 @@ void setup() {
 }
 
 void loop() {
-  /*sólo conservamos el Debug del sensor de temperatura*/
+  if ((millis() - Seg) > Tiempo2) {
+    Pitar1 = 0;
+    Pitar2 = 0;
+    Seg = millis();
+    }
+  /* Cada segundo el Sensor de temperatura y el sensor de CO2 realizan una lectura, con 0.5 segundos de diferencia entre la lectura
+     de uno con respecto al otro. */
   if ((millis() - TiempoDebug) > Debug) {
     tempSens.readTemperature();
     if (t != tempSens.readTemperature()) {
@@ -48,6 +55,7 @@ void loop() {
       Pant.print(tempSens.readTemperature());
       Pant.print("C");
     }
+    /* Los leds se actualizan en función de si la temperatura es apropiada para trabajar o no. */
     if (t < 14) {
       digitalWrite(10, LOW);
       digitalWrite(9, LOW);
@@ -75,15 +83,19 @@ void loop() {
     }
     TiempoDebug = millis();
   }
-  /* He sustituido todos los while para evitar bloqueo de código*/
+  /* Todos los procesos que involucran tiempo, excepto los pitidos, están hechos sin bucles para que no se pare
+    el programa en ningún momento. */
   if ((millis() - TiempoDebug1) > Debug) {
     Sensor.readData();
     Sensor.geteCO2();
+    /* Los leds se actualizan en función de si la concentración de partes de CO2 por millón son apropiadas
+      para estar en una habitación, adicionalmente cuando el nivel de peligro es moderado, suena una secuencia
+      de dos pitidos. */
     if (CO2 != Sensor.geteCO2()) {
       Pant.setCursor(0, 1);
       CO2 = Sensor.geteCO2();
       Pant.print(Sensor.geteCO2());
-      Pant.print(" PPM");
+      Pant.print(" PPM ");
     }
     if (CO2 <= 700) {
       Pitar1 = 0;
@@ -101,13 +113,13 @@ void loop() {
         if ((millis() - Tiempo) == 625) {
           tone(8, 4000);
         }
-        if ((millis() - Tiempo) == 750) {
+        else if ((millis() - Tiempo) == 750) {
           noTone(8);
         }
-        if ((millis() - Tiempo) == 875) {
+        else if ((millis() - Tiempo) == 875) {
           tone(8, 4000);
         }
-        if ((millis() - Tiempo) == 1000) {
+        else if ((millis() - Tiempo) == 1000) {
           noTone(8);
           Pitar1 += 1;
         }
@@ -118,17 +130,18 @@ void loop() {
       digitalWrite(13, LOW);
       digitalWrite(12, LOW);
       digitalWrite(11, HIGH);
+      Pitar1 = 1;
       while (Pitar2 < 2) {
         if ((millis() - Tiempo) == 625) {
           tone(8, 4000);
         }
-        if ((millis() - Tiempo) == 750) {
+        else if ((millis() - Tiempo) == 750) {
           noTone(8);
         }
-        if ((millis() - Tiempo) == 875) {
+        else if ((millis() - Tiempo) == 875) {
           tone(8, 4000);
         }
-        if ((millis() - Tiempo) == 1000) {
+        else if ((millis() - Tiempo) == 1000) {
           noTone(8);
           Tiempo = millis();
           Pitar2 += 1;
