@@ -1,4 +1,4 @@
-# CovidDetector_2.1.2
+# CovidDetector_2.2.0
 
 Un proyecto para detectar y advertir del nivel de riesgo de contagio por COVID-19 basandonos
 en la temperatura y las partes de CO2 por millón.
