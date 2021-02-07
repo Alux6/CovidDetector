@@ -17,6 +17,10 @@ long Pitar1 = 0;
 long Pitar2 = 0;
 long Seg = 0;
 long Tiempo = 0;
+bool T1 = true;
+bool T2 = true;
+bool b1 = true;
+bool b2 = true;
 int Debug = 1000;
 long Tiempo2 = 60000;
 int CO2 = 0;
@@ -43,8 +47,9 @@ void loop() {
   if ((millis() - Seg) > Tiempo2) {
     Pitar1 = 0;
     Pitar2 = 0;
-    Seg = millis();
-    }
+    b1 = true;
+    b2 = true;
+  }
   /* Cada segundo el Sensor de temperatura y el sensor de CO2 realizan una lectura, con 0.5 segundos de diferencia entre la lectura
      de uno con respecto al otro. */
   if ((millis() - TiempoDebug) > Debug) {
@@ -105,46 +110,77 @@ void loop() {
       digitalWrite(11, LOW);
     }
     else if ((CO2 > 700) && (CO2 < 1500)) {
-      Tiempo = millis();
+      if (b1) {
+        Seg = millis();
+        b1 = !b1;
+      }
       digitalWrite(13, LOW);
       digitalWrite(12, HIGH);
       digitalWrite(11, LOW);
-      while (Pitar1 < 1) {
-        if ((millis() - Tiempo) == 625) {
+
+      while (Pitar1 == 0) {
+        if (T1) {
+          Tiempo = millis();
+          T1 = false;
+        }
+        if (((millis() - Tiempo) >= 200) && ((millis() - Tiempo) < 400)) {
           tone(8, 4000);
         }
-        else if ((millis() - Tiempo) == 750) {
+        else if (((millis() - Tiempo) >= 400) && ((millis() - Tiempo) < 600)) {
           noTone(8);
         }
-        else if ((millis() - Tiempo) == 875) {
+        else if (((millis() - Tiempo) >= 600) && ((millis() - Tiempo) < 800)) {
           tone(8, 4000);
         }
-        else if ((millis() - Tiempo) == 1000) {
+        else if ((millis() - Tiempo) >= 800) {
           noTone(8);
-          Pitar1 += 1;
+          Pitar1 = 1;
+          T1 = true;
+        }
+        else {
+
         }
       }
     }
     else {
-      Tiempo = millis();
+      if (b2) {
+        Seg = millis();
+        b2 = !b2;
+      }
       digitalWrite(13, LOW);
       digitalWrite(12, LOW);
       digitalWrite(11, HIGH);
       Pitar1 = 1;
-      while (Pitar2 < 2) {
-        if ((millis() - Tiempo) == 625) {
-          tone(8, 4000);
-        }
-        else if ((millis() - Tiempo) == 750) {
-          noTone(8);
-        }
-        else if ((millis() - Tiempo) == 875) {
-          tone(8, 4000);
-        }
-        else if ((millis() - Tiempo) == 1000) {
-          noTone(8);
+      while (Pitar2 == 0) {
+        if (T2) {
           Tiempo = millis();
-          Pitar2 += 1;
+          T2 = false;
+        }
+        if (((millis() - Tiempo) >= 200) && ((millis() - Tiempo) < 400)) {
+          tone(8, 4000);
+        }
+        else if (((millis() - Tiempo) >= 400) && ((millis() - Tiempo) < 600)) {
+          noTone(8);
+        }
+        else if (((millis() - Tiempo) >= 600) && ((millis() - Tiempo) < 800)) {
+          tone(8, 4000);
+        }
+        else if (((millis() - Tiempo) >= 800) && ((millis() - Tiempo) < 1000)) {
+          noTone(8);
+        }
+        else if (((millis() - Tiempo) >= 1000) && ((millis() - Tiempo) < 1200)) {
+          tone(8, 4000);
+        }
+        else if (((millis() - Tiempo) >= 1200) && ((millis() - Tiempo) < 1400)) {
+          noTone(8);
+        }
+        else if (((millis() - Tiempo) >= 1400) && ((millis() - Tiempo) < 1600)) {
+          tone(8, 4000);
+        }
+        else if ((millis() - Tiempo) >= 1600) {
+          noTone(8);
+          Pitar2 = 1;
+          T2 = true;
         }
       }
     }
