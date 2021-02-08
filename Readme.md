@@ -1,7 +1,11 @@
-# CovidDetector_2.2.1
+# CovidDetector_2.2.2
 
 Un proyecto para detectar y advertir del nivel de riesgo de contagio por COVID-19 basandonos
-en la temperatura y las partes de CO2 por millón.
+en la temperatura y las partes de CO2 por millón. 
+
+Ya que el COVID-19 se queda en suspensión en el aire, cuando la ventilación es mala, el riesgo
+de contagio es mayor, como el CO2 también se acumula con la mala ventilación medir el nivel
+de CO2 nos indicará pasivamente el riesgo de contagio por COVID-19.
 
 Cuando el nivel de CO2 supera las 700 partes por millón, el aparato emite una secuencia de 
 dos pitidos y se enciende el led amarillo, cuando el aparato supera las 1500 partes de CO2
