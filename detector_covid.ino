@@ -44,7 +44,7 @@ void setup() {
 }
 
 void loop() {
-  if ((millis() - Seg) > Tiempo2) {
+  if (((millis() - Seg) > Tiempo2) && (Pitar1 != 0)){
     Pitar1 = 0;
     Pitar2 = 0;
     b1 = true;
@@ -103,8 +103,6 @@ void loop() {
       Pant.print(" PPM ");
     }
     if (CO2 <= 700) {
-      Pitar1 = 0;
-      Pitar2 = 0;
       digitalWrite(13, HIGH);
       digitalWrite(12, LOW);
       digitalWrite(11, LOW);
